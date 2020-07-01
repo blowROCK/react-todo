@@ -1,12 +1,12 @@
 import update from 'react-addons-update';
 import {TODO_DELETE, TODO_ADD, TODO_TOGGLE_DONE, TODO_TOGGLE_IMPORTANT} from "../actions/actionType";
 
-const todoInit = [];
+const toDos = function(state = [] , action) {
 
-const toDos = function(state= todoInit , action) {
+	console.log( "toDostoDos 리듀서 : ", state, action)
 	switch(action.type) {
 		case TODO_ADD:
-			return	[{
+			return [{
 				id: action.id,
 				text: action.text,
 				done: false,
@@ -17,17 +17,13 @@ const toDos = function(state= todoInit , action) {
 				return todo.id !== action.id
 			})
 		case TODO_TOGGLE_DONE:
-			return state.map((todo) => {
-				if(todo.id === action.id){
-					todo.done = !todo.done;
-				}
-			})
+			return state.map(
+			  todo => todo.id === action.id ? { ...todo, done: !todo.done } : todo
+			);
 		case TODO_TOGGLE_IMPORTANT:
-			return state.map((todo) => {
-				if(todo.id === action.id){
-					todo.important = !todo.important;
-				}
-			})
+			return state.map(
+			  todo => todo.id === action.id ? { ...todo, important: !todo.important } : todo
+			);
 		default:
 			return state ;
 	}

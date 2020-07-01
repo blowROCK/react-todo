@@ -14,7 +14,7 @@ class Modal extends Component{
 			tooltip: ''
 		}
 		this.closeModal = this.closeModal.bind(this);
-		console.log("여긴 모달 : ", this.props.modal)
+		console.log("여긴 모달 : ", this.props)
 	}
 	closeModal(){
 		this.props.modalHide();
@@ -74,9 +74,8 @@ const isInvalidChar = function (str) {
 	const rex1 = /[^a-z|A-Z|가-힣|ㄱ-ㅎㅏ-ㅣ0-9|!@#$%^&*()_+=,.?|\n\s\r]/g;
 	return rex1.test(str);
 }
-
 function mapStateToProps(state) {
-	return { modal : state.modal }
+	return state
 }
 function mapDispatchToProps(dispatch) {
 	return{

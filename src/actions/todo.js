@@ -8,20 +8,21 @@ export const todoAdd = (id, text) => {
 	}
 }
 
-export const todoDelete = (index) => {
+export const todoDelete = (id) => {
 	return {
-		type: TODO_DELETE, index
+		type: TODO_DELETE, id
 	}
 }
 
-export const todoToggleDone = (index) =>{
+export const todoToggleDone = (id) =>{
 	return {
-		type: TODO_TOGGLE_DONE, index
+		type: TODO_TOGGLE_DONE, id
 	}
 }
 
-export const todoToggleImportant = (index) =>{
+export const todoToggleImportant = (id) =>{
+	console.log("action: ", id)
 	return {
-		type: TODO_TOGGLE_IMPORTANT, index
+		type: TODO_TOGGLE_IMPORTANT, id
 	}
 }

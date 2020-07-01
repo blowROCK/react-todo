@@ -11,12 +11,27 @@ import {todoToggleDone, todoToggleImportant} from '../../actions/todo';
 class TodoComponent extends Component{
 	constructor(props) {
 		super(props);
-		console.log("props : ",this.props);
 		this.onAddBtn = this.onAddBtn.bind(this);
+		this.onModifyTodo = this.onModifyTodo.bind(this);
+		this.onToggleImportant = this.onToggleImportant.bind(this);
+		this.onToggleDone = this.onToggleDone.bind(this);
 	}
 	onAddBtn(e){
 		e.preventDefault()
 		this.props.modalShow(generatorID());
+	}
+	onModifyTodo(id){
+		console.log("모디파이 :",id)
+	}
+	onToggleImportant(e, id){
+		e.stopPropagation();
+		console.log("토클버튼 onToggleImportant ",e, id )
+		this.props.todoToggleImportant(id);
+	}
+	onToggleDone(e, id){
+		e.stopPropagation();
+		console.log("토클버튼 onToggleDone ",e,id)
+		this.props.todoToggleDone(id);
 	}
 	render(){
 		return(
@@ -46,8 +61,16 @@ class TodoComponent extends Component{
 								<div className="todoList__title do">To Do</div>
 								<ul id="doUl">
 									{this.props.toDos.map((toDo)=>{
-										if (!toDo.isDone)
-											return <TodoItem key={toDo.id} {...toDo} />
+										if (toDo && !toDo.done)
+											return (
+												<TodoItem 
+												{...toDo}
+												key={toDo.id}  
+												onModifyTodo={(e)=>this.onModifyTodo(e, toDo.id)}
+												onToggleDone={(e)=>this.onToggleDone(e, toDo.id)}
+												onToggleImportant={(e)=>this.onToggleImportant(e, toDo.id)}
+												/>
+											)
 									})}
 								</ul>
 							</div>
@@ -55,8 +78,16 @@ class TodoComponent extends Component{
 								<div className="todoList__title done">Done</div>
 								<ul id="doneUl">
 									{this.props.toDos.map((toDo)=>{
-										if (toDo.isDone)
-											return <TodoItem key={toDo.id} {...toDo} />
+										if (toDo && toDo.done)
+											return (
+												<TodoItem 
+												{...toDo}
+												key={toDo.id}  
+												onModifyTodo={(e)=>this.onModifyTodo(e, toDo.id)}
+												onToggleDone={(e)=>this.onToggleDone(e, toDo.id)}
+												onToggleImportant={(e)=>this.onToggleImportant(e, toDo.id)}
+												/>
+											)
 									})}
 								</ul>
 							</div>
@@ -74,7 +105,7 @@ function mapDispatchToProps(dispatch) {
 	return{
 		todoToggleDone: id => dispatch(todoToggleDone(id)),
 		todoToggleImportant: id => dispatch(todoToggleImportant(id)),
-		modalShow: (id) => dispatch(modalShow(id))
+		modalShow: id => dispatch(modalShow(id))
 	}
 }
 export default connect(mapStateToProps, mapDispatchToProps) (TodoComponent);
