@@ -1,13 +1,12 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@import "asset/_normalize.css";
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+:root{
+    --main-bg-color: #314555;
+    --main-gray-color: #ececec;
+    --todo-white-color: #ffffff;
+    --todo-do-color: #0394fd;
+    --todo-done-color: #fd0375;
+    --text-bg-color: #f3f3f3;
+    --btn-cancle-color: #ff5656;
+    --btn-submit-color: #55a7ff;
 }
