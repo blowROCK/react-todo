@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import PropTypes from 'prop-types';
+import Calendars from "../calendar/Calendars";
 import { connect } from 'react-redux';
 import { generatorID } from "../../features/util";
 import './Todo.css';
@@ -18,19 +18,17 @@ class TodoComponent extends Component{
 	}
 	onAddBtn(e){
 		e.preventDefault()
-		this.props.modalShow(generatorID());
+		this.props.modalShow(generatorID(), undefined);
 	}
-	onModifyTodo(id){
-		console.log("모디파이 :",id)
+	onModifyTodo(e, id, text){
+		this.props.modalShow(id, text);
 	}
 	onToggleImportant(e, id){
 		e.stopPropagation();
-		console.log("토클버튼 onToggleImportant ",e, id )
 		this.props.todoToggleImportant(id);
 	}
 	onToggleDone(e, id){
 		e.stopPropagation();
-		console.log("토클버튼 onToggleDone ",e,id)
 		this.props.todoToggleDone(id);
 	}
 	render(){
@@ -41,54 +39,52 @@ class TodoComponent extends Component{
 						<div id="addItemBtn"  onClick={this.onAddBtn} className="todo__container__contents__header__btn">
 							<i className="fa fa-plus"/>
 						</div>
-						<div id="year" className="todo__container__header__year"></div>
-						<div id="month" className="todo__container__header__month"></div>
-						<div className="todo__container__header__week">
-							<div id="left" className="todo__container__header__week__arrows ">
-								<div>
-
-								</div>
-							</div>
-							<ul id="week" className="todo__container__header__week__days"></ul>
-							<div id="right" className="todo__container__header__week__arrows right">
-								<div></div>
-							</div>
-						</div>
+						<Calendars/>
 					</div>
 					<div className="todo__container__contents">
 						<div className="todo__container__contents__todoList">
 							<div id="do" className="todo__container__contents__todoList">
 								<div className="todoList__title do">To Do</div>
 								<ul id="doUl">
-									{this.props.toDos.map((toDo)=>{
+									{this.props.toDos
+										.filter((todo) => todo.date === this.props.calendars.SelectedDate)
+										.sort((a,b) => (a.important === b.important ) ? 0 : a.important? -1 : 1)
+										// eslint-disable-next-line array-callback-return
+										.map((toDo) => {
 										if (toDo && !toDo.done)
 											return (
 												<TodoItem 
 												{...toDo}
 												key={toDo.id}  
-												onModifyTodo={(e)=>this.onModifyTodo(e, toDo.id)}
+												onModifyTodo={(e)=>this.onModifyTodo(e, toDo.id, toDo.text)}
 												onToggleDone={(e)=>this.onToggleDone(e, toDo.id)}
 												onToggleImportant={(e)=>this.onToggleImportant(e, toDo.id)}
 												/>
 											)
-									})}
+										})
+									}
 								</ul>
 							</div>
 							<div id="done" className="todo__container__contents__todoList">
 								<div className="todoList__title done">Done</div>
 								<ul id="doneUl">
-									{this.props.toDos.map((toDo)=>{
-										if (toDo && toDo.done)
-											return (
-												<TodoItem 
-												{...toDo}
-												key={toDo.id}  
-												onModifyTodo={(e)=>this.onModifyTodo(e, toDo.id)}
-												onToggleDone={(e)=>this.onToggleDone(e, toDo.id)}
-												onToggleImportant={(e)=>this.onToggleImportant(e, toDo.id)}
-												/>
-											)
-									})}
+									{this.props.toDos
+										.filter((todo) => todo.date === this.props.calendars.SelectedDate)
+										// eslint-disable-next-line array-callback-return
+										.map((toDo) => {
+											if (toDo && toDo.done) {
+												return (
+													<TodoItem
+														{...toDo}
+														key={toDo.id}
+														onModifyTodo={(e) => this.onModifyTodo(e, toDo.id)}
+														onToggleDone={(e) => this.onToggleDone(e, toDo.id)}
+														onToggleImportant={(e) => this.onToggleImportant(e, toDo.id)}
+													/>
+												)
+											}
+										})
+									}
 								</ul>
 							</div>
 						</div>
@@ -105,7 +101,7 @@ function mapDispatchToProps(dispatch) {
 	return{
 		todoToggleDone: id => dispatch(todoToggleDone(id)),
 		todoToggleImportant: id => dispatch(todoToggleImportant(id)),
-		modalShow: id => dispatch(modalShow(id))
+		modalShow: (id, text) => dispatch(modalShow(id, text)),
 	}
 }
 export default connect(mapStateToProps, mapDispatchToProps) (TodoComponent);

@@ -1,17 +1,17 @@
 import {
-	CURRENT_DATE,
-	SELECT_DATE
+	CAL_SELETE_DATE,
+	CAL_CURRENT_DATE
 } from './actionType';
 
 
 export const currDate = (date) => {
 	return {
-		type: CURRENT_DATE, date
+		type: CAL_CURRENT_DATE, date
 	}
 }
 
 export const selectDate = (date) => {
 	return {
-		type: SELECT_DATE, date
+		type: CAL_SELETE_DATE, date
 	}
 }

@@ -2,19 +2,18 @@ import React, { Component } from "react";
 import './Modal.css';
 import { connect } from 'react-redux';
 import { modalHide } from "../../actions/modal";
-import {todoAdd, todoDelete} from '../../actions/todo';
-
-// import PropTypes from 'prop-types';
+import {todoAdd, todoDelete, todoModify} from '../../actions/todo';
 
 class Modal extends Component{
 	constructor(props) {
 		super(props);
 		this.state = {
-			textValue: '',
-			tooltip: ''
+			isModify: (this.props.modal.text !== undefined),
+			textValue: this.props.modal.text,
+			tooltip: '',
+			isSubmitOk: true
 		}
 		this.closeModal = this.closeModal.bind(this);
-		console.log("여긴 모달 : ", this.props)
 	}
 	closeModal(){
 		this.props.modalHide();
@@ -22,20 +21,24 @@ class Modal extends Component{
 	onChange(e){
 		const val = e.target.value;
 		if(isInvalidChar(val)){
-			this.setState({tooltip: '!@#$%^&*()_+=,.? 를 제외한 특수 문자는 금지 입니다.'})
+			this.setState({tooltip: '!@#$%^&*()_+=,.? 를 제외한 특수 문자는 금지 입니다.', textValue: val, isSubmitOk: false})
 		}else if(val.length >= 120){
-			this.setState({tooltip: '최대 글자수 120자를 넘길 수 없 습니다.'})
+			this.setState({tooltip: '최대 글자수 120자를 넘길 수 없 습니다.', textValue: val, isSubmitOk: false})
 		}else{
 			this.setState({
 				tooltip: '',
-				textValue: val
+				textValue: val,
+				isSubmitOk: true
 			})
 		}
 	}
 	onSubmit(e){
 		e.preventDefault();
-		console.log(this.state.textValue,"**")
-		this.props.todoAdd(this.props.modal.id, this.state.textValue)
+		if(!this.state.isSubmitOk) return;
+		if(this.state.isModify)
+			this.props.todoModify(this.props.modal.id, this.state.textValue)
+		else
+			this.props.todoAdd(this.props.modal.id, this.state.textValue, this.props.calendars.SelectedDate)
 		this.props.modalHide();
 	}
 	onDelete(e){
@@ -44,7 +47,6 @@ class Modal extends Component{
 		this.props.modalHide();
 	}
 	render() {
-		// const { text, onClose } = this.props;
 		return (
 			<div className="modal" id="modal">
 				<div className="modal__content">
@@ -54,6 +56,7 @@ class Modal extends Component{
 							className="modal__content__textBox__textarea"
 							placeholder="내용을 입력 하세요." maxLength="120"
 							onChange={this.onChange.bind(this)}
+							value={this.state.textValue}
 						/>
 						<div id="tooltip" className="modal__content__textBox_tooltip">
 							{this.state.tooltip}
@@ -80,7 +83,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 	return{
 		modalHide: () => dispatch(modalHide()),
-		todoAdd: (id,text) => dispatch(todoAdd(id, text)),
+		todoAdd: (id,text, date) => dispatch(todoAdd(id, text, date)),
+		todoModify: (id, text) => dispatch(todoModify(id, text)),
 		todoDelete: (id) => dispatch(todoDelete(id))
 	}
 }
