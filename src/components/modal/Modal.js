@@ -21,9 +21,9 @@ class Modal extends Component{
 	onChange(e){
 		const val = e.target.value;
 		if(isInvalidChar(val)){
-			this.setState({tooltip: '!@#$%^&*()_+=,.? 를 제외한 특수 문자는 금지 입니다.', textValue: val, isSubmitOk: false})
+			this.setState({tooltip: '!@#$%^&*()_+=,.? 를 제외한 특수 문자는 금지입니다.', textValue: val, isSubmitOk: false})
 		}else if(val.length >= 120){
-			this.setState({tooltip: '최대 글자수 120자를 넘길 수 없 습니다.', textValue: val, isSubmitOk: false})
+			this.setState({tooltip: '최대 글자 수 120자를 넘길 수 없습니다.', textValue: val, isSubmitOk: false})
 		}else{
 			this.setState({
 				tooltip: '',
@@ -35,6 +35,10 @@ class Modal extends Component{
 	onSubmit(e){
 		e.preventDefault();
 		if(!this.state.isSubmitOk) return;
+		if(this.state.textValue === undefined){
+			this.setState({tooltip:'내용을 입력 주세요.'});
+			return;
+		}
 		if(this.state.isModify)
 			this.props.todoModify(this.props.modal.id, this.state.textValue)
 		else
@@ -63,7 +67,10 @@ class Modal extends Component{
 						</div>
 					</div>
 					<div className="modal__content__btnBox">
-						<div id="delete" onClick={this.onDelete.bind(this)} className="modal__content__textBox__delete">Delete</div>
+						{
+							this.state.isModify ?
+							<div id="delete" onClick={this.onDelete.bind(this)} className="modal__content__textBox__delete">Delete</div> : ''
+						}
 						<div id="submit" onClick={this.onSubmit.bind(this)} className="modal__content__textBox__submit">Submit</div>
 					</div>
 				</div>

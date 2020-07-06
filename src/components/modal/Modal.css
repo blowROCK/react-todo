@@ -39,7 +39,7 @@
 }
 
 .modal__content__textBox__delete{
-    display: none;
+    /*display: none;*/
     background: var(--btn-cancle-color);
 }
 .modal__content__textBox__submit{

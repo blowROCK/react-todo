@@ -49,18 +49,18 @@ class TodoComponent extends Component{
 									{this.props.toDos
 										.filter((todo) => todo.date === this.props.calendars.SelectedDate)
 										.sort((a,b) => (a.important === b.important ) ? 0 : a.important? -1 : 1)
-										// eslint-disable-next-line array-callback-return
 										.map((toDo) => {
-										if (toDo && !toDo.done)
-											return (
-												<TodoItem 
-												{...toDo}
-												key={toDo.id}  
-												onModifyTodo={(e)=>this.onModifyTodo(e, toDo.id, toDo.text)}
-												onToggleDone={(e)=>this.onToggleDone(e, toDo.id)}
-												onToggleImportant={(e)=>this.onToggleImportant(e, toDo.id)}
-												/>
-											)
+											if (toDo && !toDo.done){
+												return (
+													<TodoItem
+														{...toDo}
+														key={toDo.id}
+														onModifyTodo={(e)=>this.onModifyTodo(e, toDo.id, toDo.text)}
+														onToggleDone={(e)=>this.onToggleDone(e, toDo.id)}
+														onToggleImportant={(e)=>this.onToggleImportant(e, toDo.id)}
+													/>
+												)
+											}
 										})
 									}
 								</ul>
@@ -70,7 +70,6 @@ class TodoComponent extends Component{
 								<ul id="doneUl">
 									{this.props.toDos
 										.filter((todo) => todo.date === this.props.calendars.SelectedDate)
-										// eslint-disable-next-line array-callback-return
 										.map((toDo) => {
 											if (toDo && toDo.done) {
 												return (
