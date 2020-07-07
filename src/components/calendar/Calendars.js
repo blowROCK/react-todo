@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import CarlendarItem from './Calendar-item';
+import CalendarItems from './Calendar-item';
 import {selectDate} from '../../actions/calendars'
 import {yyyy_mm_dd} from "../../features/util";
 
@@ -84,7 +84,7 @@ class Calendars extends Component{
 							this.state.dayWeekEng.map((day, index) => {
 								const tempDay = this.getDayOfThisWeek(index);
 								return (
-									<CarlendarItem key={tempDay}
+									<CalendarItems key={tempDay}
 												   day={day}
 												   tempDay={tempDay}
 												   isToday={this.isToday(tempDay)}

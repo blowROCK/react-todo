@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class CarlendarItem extends Component{
+class CalendarItems extends Component{
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -17,4 +17,4 @@ class CarlendarItem extends Component{
 		);
 	}
 }
-export default CarlendarItem;
+export default CalendarItems;
