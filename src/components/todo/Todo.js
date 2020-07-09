@@ -31,6 +31,43 @@ class TodoComponent extends Component{
 		e.stopPropagation();
 		this.props.todoToggleDone(id);
 	}
+	getDoList(){
+		return this.props.toDos
+			.filter((todo) => todo.date === this.props.calendars.SelectedDate)
+			.sort((a,b) => (a.important === b.important ) ? 0 : a.important? -1 : 1)
+			// eslint-disable-next-line array-callback-return
+			.map((toDo) => {
+				if (toDo && !toDo.done){
+					return (
+						<TodoItem
+							{...toDo}
+							key={toDo.id}
+							onModifyTodo={(e)=>this.onModifyTodo(e, toDo.id, toDo.text)}
+							onToggleDone={(e)=>this.onToggleDone(e, toDo.id)}
+							onToggleImportant={(e)=>this.onToggleImportant(e, toDo.id)}
+						/>
+					)
+				}
+			})
+	}
+	getDoneList(){
+		return this.props.toDos
+			.filter((todo) => todo.date === this.props.calendars.SelectedDate)
+			// eslint-disable-next-line array-callback-return
+			.map((toDo) => {
+				if (toDo && toDo.done) {
+					return (
+						<TodoItem
+							{...toDo}
+							key={toDo.id}
+							onModifyTodo={(e) => this.onModifyTodo(e, toDo.id)}
+							onToggleDone={(e) => this.onToggleDone(e, toDo.id)}
+							onToggleImportant={(e) => this.onToggleImportant(e, toDo.id)}
+						/>
+					)
+				}
+			})
+	}
 	render(){
 		return(
 			<div className="todo" id="todo">
@@ -46,43 +83,16 @@ class TodoComponent extends Component{
 							<div id="do" className="todo__container__contents__todoList">
 								<div className="todoList__title do">To Do</div>
 								<ul id="doUl">
-									{this.props.toDos
-										.filter((todo) => todo.date === this.props.calendars.SelectedDate)
-										.sort((a,b) => (a.important === b.important ) ? 0 : a.important? -1 : 1)
-										.map((toDo) => {
-											if (toDo && !toDo.done){
-												return (
-													<TodoItem
-														{...toDo}
-														key={toDo.id}
-														onModifyTodo={(e)=>this.onModifyTodo(e, toDo.id, toDo.text)}
-														onToggleDone={(e)=>this.onToggleDone(e, toDo.id)}
-														onToggleImportant={(e)=>this.onToggleImportant(e, toDo.id)}
-													/>
-												)
-											}
-										})
+									{
+										this.getDoList()
 									}
 								</ul>
 							</div>
 							<div id="done" className="todo__container__contents__todoList">
 								<div className="todoList__title done">Done</div>
 								<ul id="doneUl">
-									{this.props.toDos
-										.filter((todo) => todo.date === this.props.calendars.SelectedDate)
-										.map((toDo) => {
-											if (toDo && toDo.done) {
-												return (
-													<TodoItem
-														{...toDo}
-														key={toDo.id}
-														onModifyTodo={(e) => this.onModifyTodo(e, toDo.id)}
-														onToggleDone={(e) => this.onToggleDone(e, toDo.id)}
-														onToggleImportant={(e) => this.onToggleImportant(e, toDo.id)}
-													/>
-												)
-											}
-										})
+									{
+										this.getDoneList()
 									}
 								</ul>
 							</div>
